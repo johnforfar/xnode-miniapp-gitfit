@@ -1,8 +1,8 @@
 {
   inputs = {
     xnode-manager.url = "github:Openmesh-Network/xnode-manager";
-    xnode-nextjs-template.url = "github:OpenxAI-Network/xnode-nextjs-template"; # "path:..";
-    nixpkgs.follows = "xnode-nextjs-template/nixpkgs";
+    xnode-miniapp-template.url = "github:OpenxAI-Network/xnode-miniapp-template"; # "path:..";
+    nixpkgs.follows = "xnode-miniapp-template/nixpkgs";
   };
 
   outputs = inputs: {
@@ -19,9 +19,9 @@
             hostname = ./xnode-config/hostname;
           };
         }
-        inputs.xnode-nextjs-template.nixosModules.default
+        inputs.xnode-miniapp-template.nixosModules.default
         {
-          services.xnode-nextjs-template.enable = true;
+          services.xnode-miniapp-template.enable = true;
         }
       ];
     };

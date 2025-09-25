@@ -1,11 +1,11 @@
 { pkgs, lib }:
 pkgs.buildNpmPackage {
-  pname = "xnode-nextjs-template";
+  pname = "xnode-miniapp-template";
   version = "1.0.0";
-  src = ../nextjs-app;
+  src = ../mini-app;
 
   npmDeps = pkgs.importNpmLock {
-    npmRoot = ../nextjs-app;
+    npmRoot = ../mini-app;
   };
   npmConfigHook = pkgs.importNpmLock.npmConfigHook;
 
@@ -29,12 +29,12 @@ pkgs.buildNpmPackage {
     cp -r .next/static $out/share/homepage/.next/static
 
     # https://github.com/vercel/next.js/discussions/58864
-    ln -s /var/cache/nextjs-app $out/share/homepage/.next/cache
+    ln -s /var/cache/mini-app $out/share/homepage/.next/cache
 
     chmod +x $out/share/homepage/server.js
 
     # we set a default port to support "nix run ..."
-    makeWrapper $out/share/homepage/server.js $out/bin/xnode-nextjs-template \
+    makeWrapper $out/share/homepage/server.js $out/bin/xnode-miniapp-template \
       --set-default PORT 3000 \
       --set-default HOSTNAME 0.0.0.0
 
@@ -44,6 +44,6 @@ pkgs.buildNpmPackage {
   doDist = false;
 
   meta = {
-    mainProgram = "xnode-nextjs-template";
+    mainProgram = "xnode-miniapp-template";
   };
 }

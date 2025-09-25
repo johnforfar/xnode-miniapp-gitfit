@@ -5,12 +5,12 @@
   ...
 }:
 let
-  cfg = config.services.xnode-nextjs-template;
-  xnode-nextjs-template = pkgs.callPackage ./package.nix { };
+  cfg = config.services.xnode-miniapp-template;
+  xnode-miniapp-template = pkgs.callPackage ./package.nix { };
 in
 {
   options = {
-    services.xnode-nextjs-template = {
+    services.xnode-miniapp-template = {
       enable = lib.mkEnableOption "Enable the nextjs app";
 
       hostname = lib.mkOption {
@@ -42,25 +42,25 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    users.groups.xnode-nextjs-template = { };
-    users.users.xnode-nextjs-template = {
+    users.groups.xnode-miniapp-template = { };
+    users.users.xnode-miniapp-template = {
       isSystemUser = true;
-      group = "xnode-nextjs-template";
+      group = "xnode-miniapp-template";
     };
 
-    systemd.services.xnode-nextjs-template = {
+    systemd.services.xnode-miniapp-template = {
       wantedBy = [ "multi-user.target" ];
-      description = "Nextjs App.";
+      description = "Mini App.";
       after = [ "network.target" ];
       environment = {
         HOSTNAME = cfg.hostname;
         PORT = toString cfg.port;
       };
       serviceConfig = {
-        ExecStart = "${lib.getExe xnode-nextjs-template}";
-        User = "xnode-nextjs-template";
-        Group = "xnode-nextjs-template";
-        CacheDirectory = "nextjs-app";
+        ExecStart = "${lib.getExe xnode-miniapp-template}";
+        User = "xnode-miniapp-template";
+        Group = "xnode-miniapp-template";
+        CacheDirectory = "mini-app";
       };
     };
 
