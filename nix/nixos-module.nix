@@ -31,6 +31,14 @@ in
         '';
       };
 
+      url = lib.mkOption {
+        type = lib.types.str;
+        example = "https://miniapp.miniapp-factory.marketplace.openxai.network";
+        description = ''
+          The url under which the app is hosted.
+        '';
+      };
+
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -55,6 +63,7 @@ in
       environment = {
         HOSTNAME = cfg.hostname;
         PORT = toString cfg.port;
+        NEXT_PUBLIC_URL = cfg.url;
       };
       serviceConfig = {
         ExecStart = "${lib.getExe xnode-miniapp-template}";

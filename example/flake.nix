@@ -22,6 +22,7 @@
         inputs.xnode-miniapp-template.nixosModules.default
         {
           services.xnode-miniapp-template.enable = true;
+          services.xnode-miniapp-template.url = "http://localhost:3000";
         }
       ];
     };
