@@ -1,8 +1,8 @@
 {
-  description = "Nextjs app running on Xnode!";
+  description = "Mini app running on Xnode!";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
   };
 

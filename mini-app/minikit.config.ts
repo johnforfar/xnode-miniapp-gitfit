@@ -19,9 +19,9 @@ export const minikitConfig = {
   },
   miniapp: {
     version: "1",
-    name: "mini-app",
-    subtitle: "",
-    description: "",
+    name: "xnode-miniapp-template",
+    subtitle: "Mini app running on Xnode!",
+    description: "Mini app running on Xnode!",
     screenshotUrls: [],
     iconUrl: `${ROOT_URL}/icon.png`,
     splashImageUrl: `${ROOT_URL}/splash.png`,
