@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     other: {
-      "fc:frame": JSON.stringify({
+      "fc:miniapp": JSON.stringify({
         version: "next",
         imageUrl: `${appUrl}/icon.png`,
         ogTitle: "Xnode Mini App Template",
