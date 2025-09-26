@@ -1,14 +1,13 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import sdk from "@farcaster/miniapp-sdk";
-import { MiniAppSDK } from "@farcaster/miniapp-sdk/dist/types";
+import sdk, { Context } from "@farcaster/miniapp-sdk";
 
 export interface MiniAppContext {
-  sdk: MiniAppSDK;
+  context: Context.MiniAppContext | undefined;
 }
 const defaultSettings: MiniAppContext = {
-  sdk,
+  context: undefined,
 };
 const MiniAppContext = createContext<MiniAppContext>(defaultSettings);
 
@@ -16,7 +15,22 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
   const [context, setContext] = useState<MiniAppContext>(defaultSettings);
 
   useEffect(() => {
-    context.sdk.actions.ready();
+    const ready = async () => {
+      await Promise.all([
+        sdk.back.enableWebNavigation().catch(console.error),
+        sdk.context
+          .then((context) =>
+            setContext((oldContext) => {
+              return { ...oldContext, context };
+            })
+          )
+          .catch(console.error),
+      ]);
+
+      await sdk.actions.ready().catch(console.error);
+    };
+
+    ready();
   }, []);
 
   return (

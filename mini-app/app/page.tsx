@@ -42,6 +42,9 @@ export default function Home() {
       <Button asChild>
         <Link href="/auth">Authenticate</Link>
       </Button>
+      <Button asChild>
+        <Link href="/farcaster-info">Farcaster Info</Link>
+      </Button>
     </main>
   );
 }
