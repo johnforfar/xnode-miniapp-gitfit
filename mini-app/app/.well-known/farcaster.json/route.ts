@@ -2,13 +2,17 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const appUrl = process.env.NEXT_PUBLIC_URL;
+  const accountAssociation = JSON.parse(
+    process.env.NEXT_PUBLIC_ACCOUNT_ASSOCIATION ??
+      JSON.stringify({
+        header: "",
+        payload: "",
+        signature: "",
+      })
+  );
 
   const config = {
-    accountAssociation: {
-      header: "",
-      payload: "",
-      signature: "",
-    },
+    accountAssociation,
     miniapp: {
       version: "1",
       name: "Xnode Mini App Template",

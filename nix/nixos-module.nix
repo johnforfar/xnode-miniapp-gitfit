@@ -39,6 +39,35 @@ in
         '';
       };
 
+      accountAssociation = {
+        header = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+          example = "eyJmaWQiOjkxNTIsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwMmVmNzkwRGQ3OTkzQTM1ZkQ4NDdDMDUzRURkQUU5NDBEMDU1NTk2In0";
+          description = ''
+            The header of mini app account association. https://miniapps.farcaster.xyz/docs/guides/publishing#verifying-ownership
+          '';
+        };
+
+        payload = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+          example = "eyJkb21haW4iOiJyZXdhcmRzLndhcnBjYXN0LmNvbSJ9";
+          description = ''
+            The payload of mini app account association. https://miniapps.farcaster.xyz/docs/guides/publishing#verifying-ownership
+          '';
+        };
+
+        signature = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+          example = "MHgxMGQwZGU4ZGYwZDUwZTdmMGIxN2YxMTU2NDI1MjRmZTY0MTUyZGU4ZGU1MWU0MThiYjU4ZjVmZmQxYjRjNDBiNGVlZTRhNDcwNmVmNjhlMzQ0ZGQ5MDBkYmQyMmNlMmVlZGY5ZGQ0N2JlNWRmNzMwYzUxNjE4OWVjZDJjY2Y0MDFj";
+          description = ''
+            The signature of mini app account association. https://miniapps.farcaster.xyz/docs/guides/publishing#verifying-ownership
+          '';
+        };
+      };
+
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -64,6 +93,7 @@ in
         HOSTNAME = cfg.hostname;
         PORT = toString cfg.port;
         NEXT_PUBLIC_URL = cfg.url;
+        NEXT_PUBLIC_ACCOUNT_ASSOCIATION = builtins.toJSON cfg.accountAssociation;
       };
       serviceConfig = {
         ExecStart = "${lib.getExe xnode-miniapp-template}";
