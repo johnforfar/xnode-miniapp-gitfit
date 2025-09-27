@@ -1,5 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+interface GitHubFile {
+  name: string;
+  path: string;
+  download_url: string;
+}
+
+interface WorkoutData {
+  date: string;
+  exercise: string;
+  weight: number;
+  sets: number;
+  reps: number;
+  notes: string;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -40,10 +55,10 @@ export async function GET(request: NextRequest) {
       throw new Error(`GitHub API error: ${response.status}`);
     }
 
-    const files = await response.json();
+    const files: GitHubFile[] = await response.json();
     
     // Filter for JSON workout files and fetch their content
-    const workoutFiles = files.filter((file: any) => file.name.endsWith('.json'));
+    const workoutFiles = files.filter((file: GitHubFile) => file.name.endsWith('.json'));
     const workouts = [];
     
     for (const file of workoutFiles.slice(0, 10)) { // Limit to last 10 workouts
@@ -86,7 +101,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function calculateCurrentStreak(workouts: any[]): number {
+function calculateCurrentStreak(workouts: WorkoutData[]): number {
   let streak = 0;
   const today = new Date();
   
@@ -106,7 +121,7 @@ function calculateCurrentStreak(workouts: any[]): number {
   return streak;
 }
 
-function calculateLongestStreak(workouts: any[]): number {
+function calculateLongestStreak(workouts: WorkoutData[]): number {
   let longestStreak = 0;
   let currentStreak = 0;
   
@@ -128,7 +143,7 @@ function calculateLongestStreak(workouts: any[]): number {
   return Math.max(longestStreak, currentStreak);
 }
 
-function getFavoriteExercise(workouts: any[]): string {
+function getFavoriteExercise(workouts: WorkoutData[]): string {
   const exerciseCount: { [key: string]: number } = {};
   
   workouts.forEach(workout => {
@@ -139,6 +154,6 @@ function getFavoriteExercise(workouts: any[]): string {
     .sort(([,a], [,b]) => b - a)[0]?.[0] || 'Unknown';
 }
 
-function getMaxWeight(workouts: any[]): number {
+function getMaxWeight(workouts: WorkoutData[]): number {
   return Math.max(...workouts.map(workout => workout.weight || 0), 0);
 }

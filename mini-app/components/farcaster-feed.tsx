@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface FarcasterPost {
   id: string;
@@ -136,9 +137,11 @@ export default function FarcasterFeed() {
           posts.map((post) => (
             <div key={post.id} className="bg-purple-700/50 rounded-lg p-4 border border-purple-600">
               <div className="flex items-start gap-3">
-                <img 
+                <Image 
                   src={post.author.pfp_url} 
                   alt={post.author.display_name}
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div className="flex-1 min-w-0">
@@ -158,9 +161,11 @@ export default function FarcasterFeed() {
                   </p>
                   {post.embeds && post.embeds[0]?.image_url && (
                     <div className="mt-3">
-                      <img 
+                      <Image 
                         src={post.embeds[0].image_url} 
                         alt="Workout photo"
+                        width={300}
+                        height={128}
                         className="w-full h-32 object-cover rounded-lg"
                       />
                     </div>

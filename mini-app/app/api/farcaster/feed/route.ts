@@ -1,8 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest) {
+interface FarcasterCast {
+  hash: string;
+  text: string;
+  timestamp: string;
+  author: {
+    fid: number;
+    username: string;
+    display_name: string;
+    pfp_url: string;
+  };
+  embeds?: Array<{
+    url: string;
+    image_url?: string;
+    metadata?: {
+      title?: string;
+      description?: string;
+      image?: string;
+      [key: string]: unknown;
+    };
+  }>;
+}
+
+interface FarcasterResponse {
+  casts: FarcasterCast[];
+}
+
+export async function GET() {
   try {
     const farcasterUsername = process.env.FARCASTER_USERNAME || 'johnforfar';
     const apiKey = process.env.FARCASTER_API_KEY;
@@ -123,10 +149,10 @@ export async function GET(request: NextRequest) {
       throw new Error(`Casts API error: ${castsResponse.status}`);
     }
 
-    const castsData = await castsResponse.json();
+    const castsData: FarcasterResponse = await castsResponse.json();
     
     // Filter posts that contain #gitfit hashtag
-    const gitfitPosts = castsData.casts?.filter((cast: any) => 
+    const gitfitPosts = castsData.casts?.filter((cast: FarcasterCast) => 
       cast.text?.toLowerCase().includes('#gitfit') ||
       cast.text?.toLowerCase().includes('gitfit') ||
       cast.text?.toLowerCase().includes('🏋️') ||
@@ -134,7 +160,7 @@ export async function GET(request: NextRequest) {
     ) || [];
 
     // Transform the data to match our interface
-    const posts = gitfitPosts.map((cast: any) => ({
+    const posts = gitfitPosts.map((cast: FarcasterCast) => ({
       hash: cast.hash,
       text: cast.text,
       timestamp: cast.timestamp,
@@ -144,7 +170,7 @@ export async function GET(request: NextRequest) {
         display_name: cast.author.display_name,
         pfp_url: cast.author.pfp_url,
       },
-      embeds: cast.embeds?.map((embed: any) => ({
+      embeds: cast.embeds?.map((embed) => ({
         url: embed.url,
         metadata: embed.metadata
       })) || []

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import Image from "next/image";
 
 interface GitHubActivityGraphProps {
   githubUsername: string;
@@ -120,8 +120,6 @@ export default function GitHubActivityGraph({ githubUsername }: GitHubActivityGr
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutDetail | null>(mostRecentMockWorkout ? mockWorkoutDetails[mostRecentMockWorkout.date] || null : null);
   const [isGitHubConnected, setIsGitHubConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // Check if GitHub is already connected
   useEffect(() => {
@@ -144,8 +142,6 @@ export default function GitHubActivityGraph({ githubUsername }: GitHubActivityGr
           setSelectedDate(mostRecent.date);
           setSelectedWorkout(mockWorkoutDetails[mostRecent.date] || null);
         }
-        
-        setLoading(false);
       }
     };
     checkGitHubConnection();
@@ -164,15 +160,27 @@ export default function GitHubActivityGraph({ githubUsername }: GitHubActivityGr
       // Clean up URL parameters
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, []);
+  }, [mockActivityData, mockWorkoutDetails]);
+
+  const fetchWorkoutDetails = useCallback(async (date: string) => {
+    try {
+      const response = await fetch(`/api/github/workout?date=${date}&username=${githubUsername}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.workout) {
+          setSelectedWorkout(data.workout);
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching workout details:', err);
+    }
+  }, [githubUsername]);
 
   // Load activity data when GitHub connection status changes
   useEffect(() => {
     const loadActivityData = async () => {
       try {
-        setLoading(true);
-        setError(null);
-
         if (!isGitHubConnected) {
           // Use mock data when not connected
           setActivityData(mockActivityData);
@@ -189,8 +197,6 @@ export default function GitHubActivityGraph({ githubUsername }: GitHubActivityGr
             setSelectedWorkout(mockWorkoutDetails[mostRecent.date] || null);
           }
           
-          // Set loading to false immediately for mock data
-          setLoading(false);
           return;
         } else {
           // Fetch real GitHub activity data
@@ -212,34 +218,16 @@ export default function GitHubActivityGraph({ githubUsername }: GitHubActivityGr
               await fetchWorkoutDetails(mostRecent.date);
             }
           } else {
-            setError('Failed to load GitHub activity');
+            console.error('Failed to load GitHub activity');
           }
         }
       } catch (err) {
         console.error('Error loading activity data:', err);
-        setError('Error loading activity data');
-      } finally {
-        setLoading(false);
       }
     };
 
     loadActivityData();
-  }, [isGitHubConnected, githubUsername]);
-
-  const fetchWorkoutDetails = async (date: string) => {
-    try {
-      const response = await fetch(`/api/github/workout?date=${date}&username=${githubUsername}`);
-      
-      if (response.ok) {
-        const data = await response.json();
-        if (data.workout) {
-          setSelectedWorkout(data.workout);
-        }
-      }
-    } catch (err) {
-      console.error('Error fetching workout details:', err);
-    }
-  };
+  }, [isGitHubConnected, githubUsername, mockActivityData, mockWorkoutDetails, fetchWorkoutDetails]);
 
   const handleGitHubConnection = async () => {
     setIsConnecting(true);
@@ -266,14 +254,6 @@ export default function GitHubActivityGraph({ githubUsername }: GitHubActivityGr
       // Fetch real workout details
       await fetchWorkoutDetails(date);
     }
-  };
-
-  const getActivityLevel = (count: number): 0 | 1 | 2 | 3 | 4 => {
-    if (count === 0) return 0;
-    if (count <= 1) return 1;
-    if (count <= 3) return 2;
-    if (count <= 6) return 3;
-    return 4;
   };
 
   const getActivityColor = (level: number) => {
@@ -367,7 +347,7 @@ export default function GitHubActivityGraph({ githubUsername }: GitHubActivityGr
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">@johnforfar's Git Fit</h3>
+          <h3 className="text-lg font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">@johnforfar&apos;s Git Fit</h3>
           <div className="text-xs text-gray-400">{totalCommits} commits</div>
         </div>
       </div>
@@ -523,9 +503,11 @@ export default function GitHubActivityGraph({ githubUsername }: GitHubActivityGr
               </div>
               {selectedWorkout.photoUrl && (
                 <div>
-                  <img 
+                  <Image 
                     src={selectedWorkout.photoUrl} 
                     alt="Workout photo" 
+                    width={300}
+                    height={128}
                     className="w-full h-32 object-cover rounded-lg"
                   />
                 </div>

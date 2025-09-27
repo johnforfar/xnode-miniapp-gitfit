@@ -1,6 +1,7 @@
 "use client";
 
 import { useMiniAppContext } from "@/components/context/miniapp-provider";
+import Image from "next/image";
 
 export default function FarcasterInfo() {
   const { context } = useMiniAppContext();
@@ -30,12 +31,12 @@ export default function FarcasterInfo() {
             {context.user.pfpUrl && (
               <div className="flex gap-2 place-items-center">
                 <span>Profile Picture:</span>
-                <img
+                <Image
                   src={context.user.pfpUrl}
                   alt="Profile Picture"
                   width={50}
                   height={50}
-                ></img>
+                />
               </div>
             )}
           </>

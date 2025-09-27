@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import CryptoTipping from "./crypto-tipping";
+import Image from "next/image";
 
 interface FarcasterPost {
   id: string;
@@ -211,9 +212,11 @@ export default function FarcasterFeedCard({ farcasterProfileUrl }: FarcasterFeed
             posts.map((post) => (
               <div key={post.id} className="bg-purple-700/50 rounded-lg p-3 border border-purple-600">
                 <div className="flex items-start gap-2">
-                  <img 
+                  <Image 
                     src={post.author.pfp_url} 
                     alt={post.author.display_name}
+                    width={32}
+                    height={32}
                     className="w-8 h-8 rounded-full object-cover"
                   />
                   <div className="flex-1 min-w-0">
@@ -233,9 +236,11 @@ export default function FarcasterFeedCard({ farcasterProfileUrl }: FarcasterFeed
                     </p>
                     {post.embeds && post.embeds[0]?.image_url && (
                       <div className="mt-2">
-                        <img 
+                        <Image 
                           src={post.embeds[0].image_url} 
                           alt="Workout photo"
+                          width={200}
+                          height={80}
                           className="w-full h-20 object-cover rounded-lg"
                         />
                       </div>

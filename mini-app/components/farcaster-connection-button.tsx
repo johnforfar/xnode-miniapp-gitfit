@@ -1,14 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 
-interface FarcasterConnectionButtonProps {
-  farcasterProfileUrl: string;
-}
-
-export default function FarcasterConnectionButton({ farcasterProfileUrl }: FarcasterConnectionButtonProps) {
+export default function FarcasterConnectionButton() {
   // Farcaster connection state
   const [isFarcasterConnected, setIsFarcasterConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);

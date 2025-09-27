@@ -14,6 +14,14 @@ interface OllamaRequest {
   stream?: boolean;
 }
 
+interface OllamaModel {
+  name: string;
+}
+
+interface OllamaModelsResponse {
+  models?: OllamaModel[];
+}
+
 interface OllamaResponse {
   message: {
     content: string;
@@ -24,7 +32,7 @@ interface OllamaResponse {
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, workoutContext } = await request.json();
+    const { message } = await request.json();
 
     if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
@@ -180,8 +188,8 @@ export async function GET() {
       });
     }
 
-    const data = await response.json();
-    const hasModel = data.models?.some((model: any) => model.name.includes(MODEL_NAME));
+    const data: OllamaModelsResponse = await response.json();
+    const hasModel = data.models?.some((model: OllamaModel) => model.name.includes(MODEL_NAME));
 
     return NextResponse.json({
       available: true,
@@ -190,7 +198,7 @@ export async function GET() {
       models: data.models || []
     });
 
-  } catch (error) {
+  } catch {
     return NextResponse.json({
       available: false,
       error: 'Ollama not available',

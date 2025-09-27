@@ -4,11 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-interface GitHubConnectionButtonProps {
-  githubUsername: string;
-}
-
-export default function GitHubConnectionButton({ githubUsername }: GitHubConnectionButtonProps) {
+export default function GitHubConnectionButton() {
   // GitHub connection state
   const [isGitHubConnected, setIsGitHubConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);

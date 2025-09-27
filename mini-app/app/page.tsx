@@ -4,6 +4,7 @@ import Link from "next/link";
 import GitHubActivityGraph from "@/components/github-activity-graph";
 import FarcasterFeedCard from "@/components/farcaster-feed-card";
 import AIChatCard from "@/components/ai-chat-card";
+import { WorkoutGenerationCard } from "@/components/workout-generation-card";
 
 export const dynamic = "force-dynamic";
 
@@ -39,9 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Home() {
   const githubUsername = process.env.GITHUB_USERNAME || 'your-github-username';
-  const githubRepoUrl = process.env.GITHUB_REPO_URL || 'https://github.com/your-username/your-repo-name';
   const farcasterProfileUrl = process.env.FARCASTER_PROFILE_URL || 'https://farcaster.xyz/your-farcaster-username';
-  const farcasterUsername = process.env.FARCASTER_USERNAME || 'your-farcaster-username';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
@@ -68,32 +67,44 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Three Card Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 max-w-8xl mx-auto">
-          {/* Left Card: GitHub Activity */}
+        {/* Four Card Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-8xl mx-auto">
+          {/* Top Left: GitHub Activity */}
           <div className="w-full">
             <GitHubActivityGraph githubUsername={githubUsername} />
           </div>
           
-          {/* Middle Card: Farcaster Feed & Support */}
+          {/* Top Right: Workout Generation */}
+          <div className="w-full">
+            <WorkoutGenerationCard />
+          </div>
+
+          {/* Bottom Left: Farcaster Feed & Support */}
           <div className="w-full">
             <FarcasterFeedCard farcasterProfileUrl={farcasterProfileUrl} />
           </div>
 
-          {/* Right Card: AI Chat */}
+          {/* Bottom Right: AI Chat */}
           <div className="w-full">
             <AIChatCard />
           </div>
         </div>
 
-        {/* Stats Button */}
-        <div className="text-center">
+        {/* Action Buttons */}
+        <div className="text-center space-x-4">
           <Button 
             size="lg" 
             className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-8 py-3 rounded-xl transform hover:scale-105 transition-all duration-300"
             asChild
           >
             <Link href="/stats">📊 View Stats</Link>
+          </Button>
+          <Button 
+            size="lg" 
+            className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-bold px-8 py-3 rounded-xl transform hover:scale-105 transition-all duration-300"
+            asChild
+          >
+            <Link href="/workout">🏋️‍♂️ Record Workout</Link>
           </Button>
         </div>
 

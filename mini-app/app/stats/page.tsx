@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -37,8 +37,8 @@ const mockTipsData = [
 ];
 
 export default function StatsPage() {
-  const [workoutStats, setWorkoutStats] = useState(mockWorkoutData);
-  const [tipsStats, setTipsStats] = useState(mockTipsData);
+  const [workoutStats] = useState(mockWorkoutData);
+  const [tipsStats] = useState(mockTipsData);
 
   // Calculate stats
   const totalWorkouts = workoutStats.length;
@@ -210,7 +210,7 @@ export default function StatsPage() {
 
         {/* GitHub Activity Graph */}
         <div className="mb-8">
-          <GitHubActivityGraph />
+          <GitHubActivityGraph githubUsername="your-username" />
         </div>
 
         {/* Main Stats Tabs */}

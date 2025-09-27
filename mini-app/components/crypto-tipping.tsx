@@ -13,6 +13,22 @@ interface TippingProps {
   ownerWalletAddress: string;
 }
 
+interface EthereumError {
+  code: number;
+  message: string;
+}
+
+interface EthereumRequest {
+  method: string;
+  params?: unknown[];
+}
+
+interface EthereumProvider {
+  request: (args: EthereumRequest) => Promise<unknown>;
+  on: (event: string, callback: (accounts: string[]) => void) => void;
+  removeListener: (event: string, callback: (accounts: string[]) => void) => void;
+}
+
 export default function CryptoTipping({ ownerWalletAddress }: TippingProps) {
   const [wallet, setWallet] = useState<CryptoWallet | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -53,12 +69,12 @@ export default function CryptoTipping({ ownerWalletAddress }: TippingProps) {
       // Request account access
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
-      });
+      }) as string[];
 
       // Get chain ID
       const chainId = await window.ethereum.request({
         method: "eth_chainId",
-      });
+      }) as string;
 
       const walletData: CryptoWallet = {
         address: accounts[0],
@@ -74,9 +90,10 @@ export default function CryptoTipping({ ownerWalletAddress }: TippingProps) {
       
       console.log("Wallet connected:", walletData);
       
-    } catch (error: any) {
-      console.error("Wallet connection failed:", error);
-      alert(`Wallet connection failed: ${error.message}`);
+    } catch (error: unknown) {
+      const ethError = error as EthereumError;
+      console.error("Wallet connection failed:", ethError);
+      alert(`Wallet connection failed: ${ethError.message}`);
     } finally {
       setIsConnecting(false);
     }
@@ -106,9 +123,10 @@ export default function CryptoTipping({ ownerWalletAddress }: TippingProps) {
         method: "wallet_switchEthereumChain",
         params: [{ chainId: config.chainId }],
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const ethError = error as EthereumError;
       // If chain doesn't exist, add it
-      if (error.code === 4902) {
+      if (ethError.code === 4902) {
         try {
           await window.ethereum.request({
             method: "wallet_addEthereumChain",
@@ -160,9 +178,10 @@ export default function CryptoTipping({ ownerWalletAddress }: TippingProps) {
       console.log("Transaction sent:", txHash);
       alert(`Tip sent! Transaction hash: ${txHash}`);
       
-    } catch (error: any) {
-      console.error("Transaction failed:", error);
-      alert(`Transaction failed: ${error.message}`);
+    } catch (error: unknown) {
+      const ethError = error as EthereumError;
+      console.error("Transaction failed:", ethError);
+      alert(`Transaction failed: ${ethError.message}`);
     } finally {
       setIsSending(false);
     }
@@ -303,10 +322,6 @@ export default function CryptoTipping({ ownerWalletAddress }: TippingProps) {
 // Extend Window interface for TypeScript
 declare global {
   interface Window {
-    ethereum?: {
-      request: (args: { method: string; params?: any[] }) => Promise<any>;
-      on: (event: string, callback: (accounts: string[]) => void) => void;
-      removeListener: (event: string, callback: (accounts: string[]) => void) => void;
-    };
+    ethereum?: EthereumProvider;
   }
 }

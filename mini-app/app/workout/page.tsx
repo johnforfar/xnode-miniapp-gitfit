@@ -1,15 +1,83 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { GenerateWorkoutButton } from "@/components/generate-workout-button";
+import { useState, useEffect } from "react";
+
+interface WorkoutHistory {
+  recentWorkouts: Array<{
+    date: string;
+    exercise: string;
+    weight: number;
+    sets: number;
+    reps: number;
+    notes: string;
+  }>;
+  stats: {
+    totalWorkouts: number;
+    personalRecords: number;
+    currentStreak: number;
+    favoriteExercise: string;
+  };
+}
 
 export default function Workout() {
   const [isConnected, setIsConnected] = useState(false);
+  const [workoutHistory, setWorkoutHistory] = useState<WorkoutHistory | null>(null);
   const [workout, setWorkout] = useState({
     exercise: "",
     sets: [{ reps: 0, weight: 0, unit: "kg" }],
     notes: "",
   });
+
+  // Fetch workout history when component mounts
+  useEffect(() => {
+    const fetchWorkoutHistory = async () => {
+      try {
+        // This would typically fetch from the GitHub workouts API
+        // For now, we'll use mock data
+        const mockHistory = {
+          recentWorkouts: [
+            {
+              date: "2024-09-27",
+              exercise: "Overhead Press",
+              weight: 150,
+              sets: 4,
+              reps: 3,
+              notes: "Another PR! 150 lbs overhead press!"
+            },
+            {
+              date: "2024-09-25",
+              exercise: "Squat",
+              weight: 305,
+              sets: 5,
+              reps: 1,
+              notes: "300+ SQUAT! New personal record!"
+            },
+            {
+              date: "2024-09-21",
+              exercise: "Bench Press",
+              weight: 200,
+              sets: 3,
+              reps: 3,
+              notes: "FINALLY! 200 lbs bench press achieved!"
+            }
+          ],
+          stats: {
+            totalWorkouts: 89,
+            personalRecords: 12,
+            currentStreak: 5,
+            favoriteExercise: "Deadlift"
+          }
+        };
+        setWorkoutHistory(mockHistory);
+      } catch (error) {
+        console.error('Failed to fetch workout history:', error);
+      }
+    };
+
+    fetchWorkoutHistory();
+  }, []);
 
   const addSet = () => {
     setWorkout({
@@ -178,10 +246,22 @@ export default function Workout() {
         </div>
       )}
 
+      {/* Generate Workout Button */}
+      <div className="mt-8">
+        <GenerateWorkoutButton 
+          workoutHistory={workoutHistory}
+          onWorkoutGenerated={(workout) => {
+            console.log('Generated workout:', workout);
+            // You could save this workout or do other actions here
+          }}
+        />
+      </div>
+
       {/* Instructions */}
       <div className="text-center text-sm text-muted-foreground space-y-2">
         <p>💡 <strong>Tip:</strong> Connect your GitHub account to automatically commit your workouts</p>
         <p>🎯 <strong>Goal:</strong> Turn every workout into a GitHub commit for visual progress tracking</p>
+        <p>🤖 <strong>AI Coach:</strong> Use the yellow button above to get personalized workout recommendations!</p>
       </div>
     </main>
   );

@@ -1,5 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+interface GitHubCommit {
+  message: string;
+}
+
+interface GitHubEvent {
+  type: string;
+  created_at: string;
+  payload: {
+    commits: GitHubCommit[];
+  };
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -33,13 +45,13 @@ export async function GET(request: NextRequest) {
       throw new Error(`GitHub API error: ${response.status}`);
     }
 
-    const events = await response.json();
+    const events: GitHubEvent[] = await response.json();
     
     // Process events to create activity data
     const activityMap = new Map<string, number>();
     
     // Filter for PushEvents (commits) and count them by date
-    events.forEach((event: any) => {
+    events.forEach((event: GitHubEvent) => {
       if (event.type === 'PushEvent') {
         const date = event.created_at.split('T')[0];
         const currentCount = activityMap.get(date) || 0;
