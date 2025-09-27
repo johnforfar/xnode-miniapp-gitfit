@@ -85,15 +85,23 @@ in
       group = "xnode-miniapp-template";
     };
 
+    # Enable Ollama service
+    services.ollama = {
+      enable = true;
+      port = 11434;
+    };
+
     systemd.services.xnode-miniapp-template = {
       wantedBy = [ "multi-user.target" ];
       description = "Mini App.";
-      after = [ "network.target" ];
+      after = [ "network.target" "ollama.service" ];
+      wants = [ "ollama.service" ];
       environment = {
         HOSTNAME = cfg.hostname;
         PORT = toString cfg.port;
         NEXT_PUBLIC_URL = cfg.url;
         NEXT_PUBLIC_ACCOUNT_ASSOCIATION = builtins.toJSON cfg.accountAssociation;
+        OLLAMA_HOST = "http://localhost:11434";
       };
       serviceConfig = {
         ExecStart = "${lib.getExe git-fit-miniapp}";
@@ -104,7 +112,7 @@ in
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
+      allowedTCPPorts = [ cfg.port 11434 ];
     };
   };
 }

@@ -1,0 +1,51 @@
+{
+  "id": "2024-01-15-morning",
+  "date": "2024-01-15",
+  "time": "08:30",
+  "session": "morning",
+  "exercises": [
+    {
+      "name": "Deadlift",
+      "sets": [
+        {"reps": 8, "weight": 80, "unit": "kg"},
+        {"reps": 6, "weight": 100, "unit": "kg"},
+        {"reps": 5, "weight": 120, "unit": "kg"}
+      ],
+      "notes": "Felt strong today"
+    },
+    {
+      "name": "Squat",
+      "sets": [
+        {"reps": 10, "weight": 60, "unit": "kg"},
+        {"reps": 8, "weight": 80, "unit": "kg"},
+        {"reps": 6, "weight": 100, "unit": "kg"}
+      ],
+      "notes": "Good form maintained"
+    },
+    {
+      "name": "Bench Press",
+      "sets": [
+        {"reps": 12, "weight": 50, "unit": "kg"},
+        {"reps": 10, "weight": 60, "unit": "kg"},
+        {"reps": 8, "weight": 70, "unit": "kg"}
+      ],
+      "notes": "Focus on control"
+    }
+  ],
+  "totalDuration": "45 minutes",
+  "notes": "Great workout! Felt energized throughout.",
+  "photos": ["photo-1.jpg", "photo-2.jpg"],
+  "videos": [],
+  "farcasterCastHash": "0x1234567890abcdef",
+  "githubCommitHash": "abc123def456789",
+  "tips": [
+    {
+      "from": "0x9876543210fedcba",
+      "amount": "1.0",
+      "currency": "ETH",
+      "txHash": "0xabcdef1234567890",
+      "timestamp": "2024-01-15T09:15:00Z",
+      "message": "Keep it up! 💪"
+    }
+  ]
+}

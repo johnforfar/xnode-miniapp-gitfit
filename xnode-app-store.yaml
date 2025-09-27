@@ -1,0 +1,63 @@
+name: "Git Fit Template"
+description: "Open source fitness tracker with GitHub integration and Farcaster tipping"
+version: "1.0.0"
+category: "Health & Fitness"
+tags: ["fitness", "github", "farcaster", "crypto", "social", "template"]
+author: "Open Source Community"
+license: "MIT"
+repository: "https://github.com/YOUR_USERNAME/gitfit-miniapp-template"
+
+# Xnode specific configuration
+xnode:
+  nixos_module: "./nix/nixos-module.nix"
+  package: "./nix/package.nix"
+  port: 3000
+  environment_variables:
+    - NEXT_PUBLIC_URL
+    - GITHUB_CLIENT_ID
+    - GITHUB_CLIENT_SECRET
+    - DATABASE_URL
+    - ENCRYPTION_KEY
+    - FARCASTER_API_KEY
+
+# Deployment requirements
+requirements:
+  min_memory: "512MB"
+  min_storage: "1GB"
+  ssl: true
+  domain: true
+
+# Template configuration
+template:
+  customizable:
+    - app_name: "Git Fit"
+    - domain: "your-app.yourdomain.com"
+    - github_repo: "your-workouts-repo"
+    - branding: "colors, logos, styling"
+  
+  required_setup:
+    - github_oauth_app: "Create GitHub OAuth application"
+    - github_repository: "Create repository for workout data"
+    - domain_ssl: "Configure domain and SSL certificate"
+    - environment_variables: "Set up environment variables"
+
+# Features
+features:
+  - "Farcaster wallet authentication"
+  - "GitHub workout data commits"
+  - "Crypto tipping system"
+  - "Social workout sharing"
+  - "Mobile-optimized PWA"
+  - "SQLite database"
+  - "Encrypted data storage"
+  - "Rate limiting and security"
+
+# Installation instructions
+installation:
+  steps:
+    - "Fork the repository"
+    - "Configure environment variables"
+    - "Set up GitHub OAuth app"
+    - "Create workout data repository"
+    - "Deploy to Xnode"
+    - "Configure domain and SSL"

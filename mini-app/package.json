@@ -1,6 +1,17 @@
 {
-  "name": "git-fit-miniapp",
+  "name": "git-fit-miniapp-template",
   "version": "1.0.0",
+  "description": "Open source fitness tracker template with GitHub integration and Farcaster tipping",
+  "keywords": [
+    "fitness",
+    "github",
+    "farcaster",
+    "crypto",
+    "template",
+    "xnode"
+  ],
+  "author": "Open Source Community",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
@@ -9,13 +20,18 @@
   },
   "dependencies": {
     "@farcaster/miniapp-sdk": "^0.1.10",
+    "@radix-ui/react-progress": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "chart.js": "^4.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.544.0",
     "next": "15.5.4",
     "react": "19.1.1",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "19.1.1",
+    "recharts": "^3.2.1",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
