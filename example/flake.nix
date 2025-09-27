@@ -1,8 +1,8 @@
 {
   inputs = {
     xnode-manager.url = "github:Openmesh-Network/xnode-manager";
-    xnode-miniapp-template.url = "github:OpenxAI-Network/xnode-miniapp-template"; # "path:..";
-    nixpkgs.follows = "xnode-miniapp-template/nixpkgs";
+    git-fit-miniapp.url = "github:johnforfar/xnode-miniapp-gitfit"; # "path:..";
+    nixpkgs.follows = "git-fit-miniapp/nixpkgs";
   };
 
   outputs = inputs: {
@@ -19,7 +19,7 @@
             hostname = ./xnode-config/hostname;
           };
         }
-        inputs.xnode-miniapp-template.nixosModules.default
+        inputs.git-fit-miniapp.nixosModules.default
         {
           services.xnode-miniapp-template.enable = true;
           services.xnode-miniapp-template.url = "http://localhost:3000";

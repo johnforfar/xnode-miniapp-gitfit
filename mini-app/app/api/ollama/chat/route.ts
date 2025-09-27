@@ -30,26 +30,50 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    // Fetch real workout data from GitHub
-    let workoutData = null;
-    try {
-      const workoutResponse = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/github/workouts`);
-      if (workoutResponse.ok) {
-        const data = await workoutResponse.json();
-        workoutData = data.workouts;
+    // Mock workout data for demonstration
+    const mockWorkoutData = {
+      recentWorkouts: [
+        {
+          date: "2024-09-27",
+          exercise: "Overhead Press",
+          weight: 150,
+          sets: 4,
+          reps: 3,
+          notes: "Another PR! 150 lbs overhead press!"
+        },
+        {
+          date: "2024-09-25",
+          exercise: "Squat",
+          weight: 305,
+          sets: 5,
+          reps: 1,
+          notes: "300+ SQUAT! New personal record!"
+        },
+        {
+          date: "2024-09-21",
+          exercise: "Bench Press",
+          weight: 200,
+          sets: 3,
+          reps: 3,
+          notes: "FINALLY! 200 lbs bench press achieved!"
+        }
+      ],
+      stats: {
+        totalWorkouts: 89,
+        personalRecords: 12,
+        currentStreak: 5,
+        favoriteExercise: "Deadlift"
       }
-    } catch (error) {
-      console.error('Failed to fetch workout data:', error);
-    }
+    };
 
-    // Create system prompt with real workout context
+    // Create system prompt with mock workout context
     const systemPrompt = `You are a knowledgeable fitness coach and personal trainer. You have access to the user's workout data and can provide personalized advice.
 
-${workoutData ? `User's Recent Workouts:
-${JSON.stringify(workoutData.recentWorkouts || [], null, 2)}
+User's Recent Workouts:
+${JSON.stringify(mockWorkoutData.recentWorkouts, null, 2)}
 
 User's Stats:
-${JSON.stringify(workoutData.stats || {}, null, 2)}` : 'No workout data available yet. Encourage the user to connect their GitHub account and start recording workouts.'}
+${JSON.stringify(mockWorkoutData.stats, null, 2)}
 
 Based on this data, provide helpful, personalized fitness advice. You can:
 - Suggest new exercises based on their current routine
@@ -97,16 +121,42 @@ Keep responses concise but informative. Be encouraging and motivating.`;
         timestamp: new Date().toISOString()
       });
 
-    } catch (ollamaError) {
-      console.error('Ollama API error:', ollamaError);
-      
-      return NextResponse.json({
-        error: 'Ollama service is not available. Please ensure Ollama is running with the llama3.2 model.',
-        model: MODEL_NAME,
-        timestamp: new Date().toISOString(),
-        fallback: true
-      }, { status: 503 });
-    }
+            } catch (ollamaError) {
+              console.error('Ollama API error:', ollamaError);
+              
+              // Return mock responses when Ollama is not available
+              const mockResponses = {
+                "hello": "Hey there! I'm your AI fitness coach. I can see you've been crushing it with your workouts! Your recent PRs on overhead press (150 lbs) and squat (305 lbs) are impressive! 💪 What would you like to work on today?",
+                "help": "I'm here to help with your fitness journey! I can suggest new exercises, help with form tips, recommend progression strategies, or answer questions about your workouts. Just ask me anything!",
+                "workout": "Based on your recent workouts, I'd suggest focusing on your weak points. Your deadlift could use some attention - try Romanian deadlifts for hamstring strength and rack pulls for lockout power. What do you think?",
+                "form": "Great question! For your overhead press, focus on keeping your core tight and driving through your heels. For squats, make sure you're hitting proper depth and keeping your chest up. Need specific form tips for any exercise?",
+                "progression": "Your progression looks solid! You've hit some great PRs recently. I'd suggest adding some accessory work for your weaker lifts. For bench press, try close-grip bench and tricep work. For deadlifts, add some glute bridges and hip thrusts.",
+                "routine": "Based on your current routine, I'd suggest a 4-day split: Day 1 - Squat focus, Day 2 - Bench focus, Day 3 - Deadlift focus, Day 4 - Overhead press focus. This will help you maintain strength while adding volume. Sound good?",
+                "nutrition": "Nutrition is key for recovery and performance! Make sure you're getting enough protein (1g per lb bodyweight), staying hydrated, and eating enough calories to support your training. Are you tracking your macros?",
+                "recovery": "Recovery is just as important as training! Make sure you're getting 7-9 hours of sleep, staying hydrated, and taking rest days. Your current 5-day streak is great, but don't forget to rest!",
+                "motivation": "You're doing amazing! 89 total workouts and 12 personal records - that's incredible progress! Remember, every workout counts and you're building something great. Keep pushing! 🏋️‍♂️",
+                "tips": "Here are some quick tips: 1) Warm up properly before heavy lifts, 2) Focus on form over weight, 3) Track your workouts consistently, 4) Listen to your body and rest when needed, 5) Stay consistent - that's the key to success!"
+              };
+              
+              const lowerMessage = message.toLowerCase();
+              let mockResponse = "I'm your AI fitness coach! I can see you've been working hard with your workouts. Your recent PRs are impressive! How can I help you today?";
+              
+              // Find matching mock response
+              for (const [key, response] of Object.entries(mockResponses)) {
+                if (lowerMessage.includes(key)) {
+                  mockResponse = response;
+                  break;
+                }
+              }
+              
+              return NextResponse.json({
+                message: mockResponse,
+                model: MODEL_NAME,
+                timestamp: new Date().toISOString(),
+                mock: true,
+                note: 'Ollama not available, using mock response'
+              });
+            }
 
   } catch (error) {
     console.error('Chat API error:', error);

@@ -1,5 +1,5 @@
 {
-  description = "Mini app running on Xnode!";
+  description = "Git Fit - Multi-User Fitness Tracker running on Xnode!";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
