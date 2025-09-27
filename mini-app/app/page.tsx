@@ -12,19 +12,19 @@ export async function generateMetadata(): Promise<Metadata> {
       "fc:miniapp": JSON.stringify({
         version: "next",
         imageUrl: `${appUrl}/icon.png`,
-        ogTitle: "Xnode Mini App Template",
-        ogDescription: "Mini app running on Xnode!",
+        ogTitle: "Git Fit",
+        ogDescription: "Get fit with Git! Track your fitness journey.",
         ogImageUrl: `${appUrl}/icon.png`,
         button: {
           title: "Launch Mini App",
           action: {
             type: "launch_miniapp",
-            name: "Xnode Mini App Template",
+            name: "Git Fit",
             url: appUrl,
             splashImageUrl: `${appUrl}/icon.png`,
             iconUrl: `${appUrl}/icon.png`,
             splashBackgroundColor: "#000000",
-            description: "Mini app running on Xnode!",
+            description: "Get fit with Git! Track your fitness journey.",
             primaryCategory: "utility",
             tags: [],
           },
@@ -37,8 +37,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Home() {
   return (
     <main className="flex flex-col gap-3 row-start-2 place-content-center place-items-center justify-center">
-      <span className="text-2xl">Xnode Mini App Template</span>
-      <span className="text-muted-foreground">Mini app running on Xnode!</span>
+      <span className="text-2xl">Git Fit</span>
+      <span className="text-muted-foreground">Get fit with Git! Track your fitness journey.</span>
       <Button asChild>
         <Link href="/auth">Authenticate</Link>
       </Button>

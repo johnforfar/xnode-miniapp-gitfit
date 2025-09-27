@@ -15,7 +15,7 @@ export async function GET() {
     accountAssociation,
     miniapp: {
       version: "1",
-      name: "Xnode Mini App Template",
+      name: "Git Fit",
       iconUrl: `${appUrl}/icon.png`,
       homeUrl: appUrl,
       imageUrl: `${appUrl}/icon.png`,

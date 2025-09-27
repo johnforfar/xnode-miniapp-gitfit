@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.services.xnode-miniapp-template;
-  xnode-miniapp-template = pkgs.callPackage ./package.nix { };
+  git-fit-miniapp = pkgs.callPackage ./package.nix { };
 in
 {
   options = {
@@ -96,7 +96,7 @@ in
         NEXT_PUBLIC_ACCOUNT_ASSOCIATION = builtins.toJSON cfg.accountAssociation;
       };
       serviceConfig = {
-        ExecStart = "${lib.getExe xnode-miniapp-template}";
+        ExecStart = "${lib.getExe git-fit-miniapp}";
         User = "xnode-miniapp-template";
         Group = "xnode-miniapp-template";
         CacheDirectory = "mini-app";

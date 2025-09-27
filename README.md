@@ -1,6 +1,6 @@
-## Xnode Mini App Template
+## Git Fit Mini App
 
-Template to make your mini app Xnode/Nix compatible.
+Get fit with Git! Track your fitness journey with this Farcaster mini app.
 
 ## Commands (in root folder)
 

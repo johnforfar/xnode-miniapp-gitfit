@@ -1,5 +1,5 @@
 {
-  "name": "xnode-miniapp-template",
+  "name": "git-fit-miniapp",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev --turbopack",
