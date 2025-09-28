@@ -22,7 +22,7 @@
         inputs.git-fit-miniapp.nixosModules.default
         {
           services.xnode-miniapp-template.enable = true;
-          services.xnode-miniapp-template.url = "http://localhost:3000";
+          services.xnode-miniapp-template.url = "https://gitfit.openmesh.cloud";
         }
       ];
     };
